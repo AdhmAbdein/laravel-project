@@ -36,7 +36,7 @@ WORKDIR /var/www/html
 COPY ./project-code /var/www/html
 
 # Verify the files copied and check if composer.json exists
-RUN ls -l /var/www/html/composer.json
+RUN ls -l /var/www/html
 
 # Install Composer for Laravel dependencies
 RUN curl -sS https://getcomposer.org/installer | php \
