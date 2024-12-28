@@ -4,17 +4,19 @@ FROM php:8.1-fpm
 RUN apt-get update && apt-get install -y \
     git zip unzip curl libpng-dev libjpeg62-turbo-dev libfreetype6-dev libmariadb-dev lsb-release apt-transport-https ca-certificates curl
 
-# Add the Sury repository to get PHP 8.1 packages
-RUN curl -fsSL https://packages.sury.org/php/README.txt | bash - \
+# Add the Ondřej Surý PHP repository for PHP 8.1
+RUN curl -sS https://packages.sury.org/php/README.txt | bash - \
     && apt-get update
 
-# Install PHP extensions for PDO, MySQL, and other necessary PHP libraries
+# Install PHP 8.1 and required extensions
 RUN apt-get install -y \
     php8.1-cli \
     php8.1-pdo \
     php8.1-mysql \
     php8.1-zip \
-    php8.1-curl
+    php8.1-curl \
+    php8.1-bcmath \
+    php8.1-mbstring
 
 # Set the working directory
 WORKDIR /var/www/html
