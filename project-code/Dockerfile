@@ -26,25 +26,22 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
 # Set the working directory
 WORKDIR /var/www/html
 
-# Copy the project code into the container
-COPY . /var/www/html/
-
 # Install and run Laravel
 RUN curl -sS https://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/composer \
     && composer create-project laravel/laravel . --prefer-dist --no-scripts \
     && composer require laravel/framework
 
-# Copy your application files over the fresh Laravel install
-COPY ./app /var/www/html/app/
-COPY ./public /var/www/html/public/
-COPY ./resources /var/www/html/resources/
-COPY ./routes /var/www/html/routes/
-COPY ./tests /var/www/html/tests/
+# Copy your application code
+COPY app app/
+COPY public public/
+COPY resources resources/
+COPY routes routes/
+COPY tests tests/
 
 # Set proper permissions
 RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html/storage \
+    && chmod -R 755 storage \
     && php artisan key:generate
 
 # Command to start PHP-FPM
