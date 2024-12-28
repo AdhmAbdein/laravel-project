@@ -26,17 +26,23 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
 # Set the working directory
 WORKDIR /var/www/html
 
-# Copy the project code into the container
-COPY ../ /var/www/html/
+# Copy composer files first
+COPY composer.json composer.lock ./
 
-# Install Composer for Laravel dependencies
+# Install Composer
 RUN curl -sS https://getcomposer.org/installer | php \
-    && mv composer.phar /usr/local/bin/composer \
-    && composer install --no-interaction
+    && mv composer.phar /usr/local/bin/composer
 
-# Set proper permissions
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html/storage
+# Install dependencies
+RUN composer install --no-scripts --no-autoloader --no-interaction
+
+# Copy the rest of the application
+COPY . .
+
+# Generate autoloader and run scripts
+RUN composer dump-autoload --optimize \
+    && chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 storage bootstrap/cache
 
 # Command to start PHP-FPM
 CMD ["php-fpm"]
