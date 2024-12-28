@@ -1,4 +1,3 @@
-# Use PHP 8.1 FPM image as the base
 FROM php:8.1-fpm
 
 # Install system dependencies
@@ -12,49 +11,32 @@ RUN apt-get update && apt-get install -y \
     libfreetype6-dev \
     libmariadb-dev \
     libonig-dev \
-    libzip-dev \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    libzip-dev
+
+# Configure and install PHP extensions
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install \
         pdo \
         pdo_mysql \
         bcmath \
         mbstring \
         zip \
-        gd \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+        gd
 
 # Set the working directory
 WORKDIR /var/www/html
 
-# Install Composer globally
+# Copy the project code into the container
+COPY ../ /var/www/html/
+
+# Install Composer for Laravel dependencies
 RUN curl -sS https://getcomposer.org/installer | php \
-    && mv composer.phar /usr/local/bin/composer
+    && mv composer.phar /usr/local/bin/composer \
+    && composer install --no-interaction
 
-# Copy only necessary files for Composer installation
-COPY composer.json composer.json
-COPY composer.lock composer.lock
-
-# Install Laravel dependencies
-RUN composer install --no-dev --optimize-autoloader
-
-# Copy application files into the container
-COPY app app/
-COPY public public/
-COPY resources resources/
-COPY routes routes/
-COPY tests tests/
-
-# Set proper permissions for Laravel storage and cache
+# Set proper permissions
 RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html/storage \
-    && chmod -R 755 /var/www/html/bootstrap/cache
+    && chmod -R 755 /var/www/html/storage
 
-# Generate Laravel application key
-RUN php artisan key:generate
-
-# Expose port 9000 for PHP-FPM
-EXPOSE 9000
-
-# Start the PHP-FPM server
+# Command to start PHP-FPM
 CMD ["php-fpm"]
-
