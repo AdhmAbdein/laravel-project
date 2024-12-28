@@ -15,9 +15,9 @@ RUN apt-get update && apt-get install -y \
     pkg-config
 
 # Set environment variables for libzip
-ENV PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
-ENV LIBZIP_CFLAGS=-I/usr/local/include
-ENV LIBZIP_LIBS=-L/usr/local/lib -lzip
+RUN export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig \
+    && export LIBZIP_CFLAGS=-I/usr/local/include \
+    && export LIBZIP_LIBS="-L/usr/local/lib -lzip"
 
 # Configure and install PHP extensions
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
