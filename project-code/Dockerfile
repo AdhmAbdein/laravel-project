@@ -27,7 +27,7 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
 WORKDIR /var/www/html
 
 # Copy the project code into the container
-COPY ../ /var/www/html/
+COPY . .  # Changed this line to copy from current context
 
 # Install Composer for Laravel dependencies
 RUN curl -sS https://getcomposer.org/installer | php \
