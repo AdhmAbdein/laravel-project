@@ -35,8 +35,8 @@ WORKDIR /var/www/html
 # Copy the project code into the container
 COPY ./project-code /var/www/html
 
-# Verify the files copied and check if artisan exists
-RUN ls -l /var/www/html
+# Verify the files copied and check if composer.json exists
+RUN ls -l /var/www/html/composer.json
 
 # Install Composer for Laravel dependencies
 RUN curl -sS https://getcomposer.org/installer | php \
