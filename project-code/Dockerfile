@@ -43,7 +43,6 @@ COPY public public/
 COPY resources resources/
 COPY routes routes/
 COPY tests tests/
-COPY .env .env
 
 # Set proper permissions for Laravel storage and cache
 RUN chown -R www-data:www-data /var/www/html \
