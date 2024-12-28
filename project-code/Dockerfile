@@ -37,7 +37,8 @@ COPY ./project-code /var/www/html
 
 # Install Composer for Laravel dependencies
 RUN curl -sS https://getcomposer.org/installer | php \
-    && mv composer.phar /usr/local/bin/composer
+    && mv composer.phar /usr/local/bin/composer \
+    && composer install --working-dir=/var/www/html
 
 # Command to start PHP-FPM
 CMD ["php-fpm"]
