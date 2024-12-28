@@ -10,7 +10,14 @@ RUN apt-get update && apt-get install -y \
     libjpeg62-turbo-dev \
     libfreetype6-dev \
     libmariadb-dev \
-    libonig-dev  # Added this for mbstring support
+    libonig-dev \
+    libzip-dev \
+    pkg-config
+
+# Set environment variables for libzip
+ENV PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
+ENV LIBZIP_CFLAGS=-I/usr/local/include
+ENV LIBZIP_LIBS=-L/usr/local/lib -lzip
 
 # Configure and install PHP extensions
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
