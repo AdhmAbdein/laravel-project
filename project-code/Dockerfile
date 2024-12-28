@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y \
     libfreetype6-dev \
     libmariadb-dev \
     libonig-dev \
-    libzip-dev  # Added this for zip extension
+    libzip-dev
 
 # Configure and install PHP extensions
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
@@ -27,11 +27,16 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
 WORKDIR /var/www/html
 
 # Copy the project code into the container
-COPY ./project-code /var/www/html
+COPY . .  # Changed this line to copy from current context
 
 # Install Composer for Laravel dependencies
 RUN curl -sS https://getcomposer.org/installer | php \
-    && mv composer.phar /usr/local/bin/composer
+    && mv composer.phar /usr/local/bin/composer \
+    && composer install --no-interaction
+
+# Set proper permissions
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html/storage
 
 # Command to start PHP-FPM
 CMD ["php-fpm"]
