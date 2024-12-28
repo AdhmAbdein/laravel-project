@@ -35,7 +35,7 @@ WORKDIR /var/www/html
 # Copy the project code into the container
 COPY ./project-code /var/www/html
 
-# Verify the files copied and check if composer.json exists
+# Verify that composer.json exists in the container
 RUN ls -l /var/www/html
 
 # Install Composer for Laravel dependencies
