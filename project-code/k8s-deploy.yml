@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: calc-app
+  labels:
+    laravel: calc  
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      laravel: calc
+  template:
+    metadata:
+      name: pod-calc
+      labels:
+        laravel: calc
+    spec:
+      containers:
+        - name: calc-cont
+          image: adhmabdein/mylaravelimg
+          ports:
+            - conrainerPort: 8000
+          volumeMounts:
+            - name: calc-vol
+              mountPath: /var/www/html/data 
+      volumes:
+        - name: calc-vol
+          persistentVolumeClaim:
+            claimName: pvc-calc
+

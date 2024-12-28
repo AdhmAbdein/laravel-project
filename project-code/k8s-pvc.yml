@@ -1,0 +1,12 @@
+apiVersion: vi
+kind: PersistentVolumeClaim
+metadata: 
+  name: pvc-calc
+spec:
+  volumeName: pv-calc 
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi    
+  
