@@ -35,9 +35,16 @@ WORKDIR /var/www/html
 # Copy the project code into the container
 COPY ./project-code /var/www/html
 
+# Verify the files copied and check if artisan exists
+RUN ls -l /var/www/html
+
 # Install Composer for Laravel dependencies
 RUN curl -sS https://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/composer
 
+# Install Laravel dependencies
+RUN composer install
+
 # Command to start PHP-FPM
 CMD ["php-fpm"]
+
