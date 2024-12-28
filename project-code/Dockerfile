@@ -15,9 +15,12 @@ WORKDIR /var/www/html
 COPY ./project-code  /var/www/html
 
 #Install Laravel Dependencies & composer
-RUN curl -sS https://getcomposer.org/installer | php && \
-    mv composer.phar /usr/local/bin/composer && \
-    composer install --no-dev 
+RUN apt-get update && apt-get install -y \
+    lsb-release apt-transport-https ca-certificates curl \
+    && curl -fsSL https://packages.sury.org/php/README.txt | bash - \
+    && apt-get update \
+    && apt-get install -y \
+    php8.1 php8.1-pdo php8.1-mysql
 
 CMD ["php-fpm"]
 
