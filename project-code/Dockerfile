@@ -2,7 +2,7 @@ FROM php:8.1-fpm
 
 #Install Dependencies
 RUN apt-get update && apt-get install -y \
-    git zip unzip curl libpng-dev libjpeg62-turbo-dev libfreetype6-dev libmysqlclient-dev
+    git zip unzip curl libpng-dev libjpeg62-turbo-dev libfreetype6-dev libmariadb-dev
 
 RUN apt-get update && apt-get install -y \
     php8.1-pdo \
